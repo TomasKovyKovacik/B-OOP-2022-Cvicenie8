@@ -1,25 +1,21 @@
 package sk.stuba.fei.uim.oop;
 
+import javax.swing.*;
 import java.io.*;
 
 public class Main {
     public static void main(String[] args) {
-        InputStream is = Main.class.getClassLoader().getResourceAsStream("textFile.txt");
+        JFrame frame = new JFrame("okno");
+        frame.setSize(500,500);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        if (is == null) {
-            System.out.println("TENTO FILE NENI V RESOURCOCH");
-            return;
-        }
+        Logic logic = new Logic(frame);
 
-        InputStreamReader isr = new InputStreamReader(is);
+        JButton button = new JButton("Ulozit");
+        button.setFocusable(false);
+        button.addActionListener(logic);
 
-        BufferedReader reader = new BufferedReader(isr);
-        try {
-            for (String line = reader.readLine(); line != null ; line = reader.readLine()) {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        frame.add(button);
+        frame.setVisible(true);
     }
 }

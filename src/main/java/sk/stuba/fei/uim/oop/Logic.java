@@ -1,41 +1,47 @@
 package sk.stuba.fei.uim.oop;
 
-import lombok.Getter;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
-public class Logic implements KeyListener, ChangeListener {
+public class Logic implements ActionListener {
 
-    @Getter
-    private JLabel label;
     private JFrame frame;
 
     public Logic(JFrame frame) {
         this.frame = frame;
-        this.label = new JLabel("Zaciatocny text");
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void actionPerformed(ActionEvent e) {
+        FileDialog fd = new FileDialog(frame, "Dialog na vyber suboru", FileDialog.SAVE);
+        fd.setDirectory("C:\\");
+        fd.setFile("mojfile.txt");
+        fd.setVisible(true);
 
-    }
+        String filename = fd.getFile();
+        if (filename == null) {
+            System.out.println("Zrusil si vyber");
+        } else {
+            System.out.println("Miesto ulozenia: " + fd.getDirectory()  + filename);
+            try {
+                FileOutputStream file = new FileOutputStream(fd.getDirectory()  + filename);
+                OutputStreamWriter out = new OutputStreamWriter(file);
+                PrintWriter toFile = new PrintWriter(out);
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        System.out.println("Stlacil som " + e.getKeyChar());
-    }
+                toFile.println("Toto je zapis do suboru");
+                toFile.close();
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
-    @Override
-    public void stateChanged(ChangeEvent e) {
-        this.label.setText(" Cislo " + ((JSlider) e.getSource()).getValue());
+            } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }
